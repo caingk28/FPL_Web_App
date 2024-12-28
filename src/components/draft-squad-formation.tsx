@@ -12,26 +12,26 @@ interface FormationProps {
   }
 }
 
-const FORMATIONS = {
+const FORMATIONS: Record<string, Record<string, [number, number][]>> = {
   '4-4-2': {
-    GKP: [[50, 90]], // Moved goalkeeper closer to bottom
-    DEF: [[15, 70], [38, 70], [62, 70], [85, 70]], // Spread defenders wider
-    MID: [[15, 45], [38, 45], [62, 45], [85, 45]], // Spread midfielders wider
-    FWD: [[35, 20], [65, 20]] // Spread forwards wider and higher up
+    GKP: [[50, 87]], // Moved goalkeeper down slightly
+    DEF: [[15, 65], [38, 65], [62, 65], [85, 65]], // Defenders stay at same position
+    MID: [[15, 40], [38, 40], [62, 40], [85, 40]],
+    FWD: [[35, 15], [65, 15]]
   },
   '4-3-3': {
-    GKP: [[50, 90]],
-    DEF: [[15, 70], [38, 70], [62, 70], [85, 70]],
-    MID: [[35, 45], [50, 45], [65, 45]],
-    FWD: [[25, 20], [50, 20], [75, 20]]
+    GKP: [[50, 87]],
+    DEF: [[15, 65], [38, 65], [62, 65], [85, 65]],
+    MID: [[35, 40], [50, 40], [65, 40]],
+    FWD: [[25, 15], [50, 15], [75, 15]]
   },
   '3-5-2': {
-    GKP: [[50, 90]],
-    DEF: [[30, 70], [50, 70], [70, 70]],
-    MID: [[15, 45], [35, 45], [50, 45], [65, 45], [85, 45]],
-    FWD: [[35, 20], [65, 20]]
+    GKP: [[50, 87]],
+    DEF: [[30, 65], [50, 65], [70, 65]],
+    MID: [[15, 40], [35, 40], [50, 40], [65, 40], [85, 40]],
+    FWD: [[35, 15], [65, 15]]
   }
-}
+};
 
 function detectFormation(players: SquadPlayer[]): keyof typeof FORMATIONS {
   const positions = players.reduce((acc, player) => {
@@ -84,33 +84,33 @@ function PlayerPosition({ player, position: [x, y] }: { player: SquadPlayer, pos
             <img 
               src={`/kit-images/${teamCodeMap[player.teamShortName] || 'default-kit'}-2024.png`}
               alt={player.teamShortName}
-              className="w-10 h-10 sm:w-12 sm:h-12 object-contain"
+              className="w-16 h-16 sm:w-20 sm:h-20 object-contain transition-transform hover:scale-110"
               onError={(e) => {
                 console.log('Kit image failed to load for:', player.teamShortName);
                 e.currentTarget.style.display = 'none';
                 e.currentTarget.nextElementSibling?.classList.remove('hidden');
               }}
             />
-            <div className="absolute -top-1 -right-1 flex gap-1">
+            <div className="absolute -top-1.5 -right-1.5 flex gap-1.5">
               {player.isCaptain && (
-                <div className="bg-primary rounded-full p-1 shadow-md">
-                  <Star className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-primary-foreground" />
+                <div className="bg-primary rounded-full p-1.5 shadow-md">
+                  <Star className="w-3 h-3 sm:w-4 sm:h-4 text-primary-foreground" />
                 </div>
               )}
-              <div className="bg-background/90 backdrop-blur-sm rounded-full w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center shadow-md cursor-pointer">
-                <Info className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-foreground" />
+              <div className="bg-background/90 backdrop-blur-sm rounded-full w-6 h-6 sm:w-7 sm:h-7 flex items-center justify-center shadow-md cursor-pointer hover:bg-background/95">
+                <Info className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-foreground" />
               </div>
             </div>
           </div>
-          <div className="text-xs sm:text-sm font-medium text-center line-clamp-1 text-white drop-shadow-md mt-1">
+          <div className="text-[9px] sm:text-xs font-medium text-center line-clamp-1 text-white drop-shadow-md mt-1.5 max-w-[100px] sm:max-w-[120px]">
             {player.webName}
           </div>
           {player.status !== 'available' && (
-            <div className="text-[10px] sm:text-xs text-destructive font-medium drop-shadow-md mt-0.5">
+            <div className="text-[8px] sm:text-[10px] text-destructive font-medium drop-shadow-md mt-0.5">
               {player.status.charAt(0).toUpperCase()}
             </div>
           )}
-          <div className="text-[10px] sm:text-xs text-white/90 mt-0.5 drop-shadow-md">
+          <div className="text-[8px] sm:text-[10px] text-white/90 mt-0.5 drop-shadow-md">
             {player.teamShortName}
           </div>
         </div>
@@ -191,17 +191,17 @@ export function DraftSquadFormation({ players }: FormationProps) {
       </div>
 
       {/* Bench */}
-      <Card className="p-2 sm:p-4">
-        <div className="flex items-center gap-2 mb-4">
-          <Shirt className="w-4 h-4 text-muted-foreground" />
-          <h4 className="font-semibold">Substitutes</h4>
+      <Card className="p-3 sm:p-6">
+        <div className="flex items-center gap-2 mb-6">
+          <Shirt className="w-5 h-5 text-muted-foreground" />
+          <h4 className="font-semibold text-lg">Substitutes</h4>
         </div>
         <div className="flex justify-center">
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-8 w-full place-items-center">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 sm:gap-10 w-full place-items-center">
             {players.bench.map(player => (
               <div 
                 key={player.id} 
-                className="flex flex-col items-center w-full max-w-[120px]"
+                className="flex flex-col items-center w-full max-w-[140px]"
               >
                 <div className="relative">
                   <div className="flex flex-col items-center">
@@ -209,33 +209,33 @@ export function DraftSquadFormation({ players }: FormationProps) {
                       <img 
                         src={`/kit-images/${teamCodeMap[player.teamShortName] || 'default-kit'}-2024.png`}
                         alt={player.teamShortName}
-                        className="w-10 h-10 sm:w-12 sm:h-12 object-contain"
+                        className="w-16 h-16 sm:w-20 sm:h-20 object-contain transition-transform hover:scale-110"
                         onError={(e) => {
                           console.log('Bench kit image failed to load for:', player.teamShortName);
                           e.currentTarget.style.display = 'none';
                           e.currentTarget.nextElementSibling?.classList.remove('hidden');
                         }}
                       />
-                      <div className="absolute -top-1 -right-1 flex gap-1">
+                      <div className="absolute -top-1.5 -right-1.5 flex gap-1.5">
                         {player.isCaptain && (
-                          <div className="bg-primary rounded-full p-1 shadow-md">
-                            <Star className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-primary-foreground" />
+                          <div className="bg-primary rounded-full p-1.5 shadow-md">
+                            <Star className="w-3 h-3 sm:w-4 sm:h-4 text-primary-foreground" />
                           </div>
                         )}
-                        <div className="bg-background/90 backdrop-blur-sm rounded-full w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center shadow-md cursor-pointer">
-                          <Info className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-foreground" />
+                        <div className="bg-background/90 backdrop-blur-sm rounded-full w-6 h-6 sm:w-7 sm:h-7 flex items-center justify-center shadow-md cursor-pointer hover:bg-background/95">
+                          <Info className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-foreground" />
                         </div>
                       </div>
                     </div>
-                    <div className="text-xs sm:text-sm font-medium text-center line-clamp-1 mt-1">
+                    <div className="text-sm sm:text-base font-medium text-center line-clamp-1 mt-2">
                       {player.webName}
                     </div>
                     {player.status !== 'available' && (
-                      <div className="text-[10px] sm:text-xs text-destructive font-medium mt-0.5">
+                      <div className="text-xs sm:text-sm text-destructive font-medium mt-1">
                         {player.status.charAt(0).toUpperCase()}
                       </div>
                     )}
-                    <div className="text-[10px] sm:text-xs text-muted-foreground mt-0.5">
+                    <div className="text-xs sm:text-sm text-muted-foreground mt-0.5">
                       {player.teamShortName}
                     </div>
                   </div>

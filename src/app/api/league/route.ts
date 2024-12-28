@@ -52,7 +52,7 @@ export async function POST(request: Request) {
           return {
             rank: entry.rank || 0,
             entry_name: entry.entry_name,
-            player_name: `${entry.player_first_name} ${entry.player_last_name}`,
+            player_name: `${entry.player_first_name} ${entry.player_last_name}`.trim(),
             total: totalPoints,
             last_gameweek: lastGameweek ? {
               event: lastGameweek.event,
@@ -82,20 +82,23 @@ export async function POST(request: Request) {
           `https://fantasy.premierleague.com/api/leagues-classic/${leagueId}/standings/`
         )
 
+        const leagueData = response.data
+        const standings = (leagueData.standings?.results || []).map((standing: any) => ({
+          rank: standing.rank || 0,
+          entry_name: standing.entry_name || '',
+          player_name: standing.player_name || '',
+          total: standing.total || 0,
+          last_gameweek: standing.event_total ? {
+            event: leagueData.current_event || 0,
+            points: standing.event_total
+          } : null
+        }))
+
         return NextResponse.json({
-          leagueName: response.data.league.name,
+          leagueName: leagueData.league?.name || '',
           leagueType: 'Regular',
-          standings: response.data.standings.results.map((standing: any) => ({
-            rank: standing.rank,
-            entry_name: standing.entry_name,
-            player_name: standing.player_name,
-            total: standing.total,
-            last_gameweek: null,
-            matches_played: null,
-            matches_won: null,
-            matches_drawn: null,
-            matches_lost: null
-          }))
+          standings: standings,
+          currentGameweek: leagueData.current_event || 0
         })
       }
     } catch (error: any) {

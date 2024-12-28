@@ -28,14 +28,18 @@ export async function POST(request: Request) {
           axios.get(`https://fantasy.premierleague.com/api/entry/${teamId}/history/`)
         ])
 
+        const details = detailsResponse.data
+        const history = historyResponse.data
+
         return NextResponse.json({
-          teamName: detailsResponse.data.name,
-          points: detailsResponse.data.summary_overall_points,
-          playerName: detailsResponse.data.player_first_name + ' ' + detailsResponse.data.player_last_name,
-          rank: detailsResponse.data.summary_overall_rank,
-          history: historyResponse.data.current
+          teamName: details.name,
+          points: details.summary_overall_points || details.overall_points || 0,
+          playerName: `${details.player_first_name || ''} ${details.player_last_name || ''}`.trim(),
+          rank: details.summary_overall_rank || details.overall_rank,
+          history: history.current || []
         })
       } catch (error: any) {
+        console.error("API Error:", error.response?.data || error.message)
         if (error.response?.status === 404) {
           return NextResponse.json(
             { error: "Team not found. Please check the Team ID." },
