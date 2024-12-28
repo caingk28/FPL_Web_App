@@ -1,0 +1,70 @@
+# FPL Web App Project Rules and Progress
+
+## Latest Updates (2024-01-03)
+
+- Successfully implemented squad data fetching using correct FPL Draft API endpoints
+- Fixed API integration by analyzing official FPL Draft website endpoints
+- Implemented proper error handling and logging
+
+## Current Project Structure
+
+/src
+/app
+/api
+/draft
+/squad
+route.ts - Squad data endpoint using correct FPL Draft API
+/test
+route.ts - Test endpoint for league data
+/components
+/ui - Shadcn UI components
+fpl-form.tsx - Main form component
+/types
+draft.ts - TypeScript interfaces for Draft data
+
+## API Endpoints Used
+
+1. League Data:
+   - GET /api/league/{league_id}/details
+2. Team Data:
+   - GET /api/entry/{team_id}/public
+   - GET /api/entry/{team_id}/event/{gameweek}
+3. Global Data:
+   - GET /api/bootstrap-static
+   - GET /api/bootstrap-dynamic
+   - GET /api/event/{gameweek}/live
+
+## Current Features
+
+1. League Data:
+   - Fetch and display league teams
+   - Show team rankings and points
+2. Squad Data:
+   - Fetch team squad information
+   - Display starting XI and bench
+   - Show player positions and status
+
+## Next Steps
+
+1. UI Improvements:
+   - Enhanced squad display
+   - Better loading states
+   - Error handling feedback
+2. Feature Additions:
+   - Player statistics
+   - Team performance history
+   - Transfer history
+
+## Code Style Rules
+
+1. Use TypeScript for all new files
+2. Follow existing naming conventions
+3. Include proper error handling
+4. Add detailed logging for debugging
+5. Keep components modular and reusable
+
+## Testing
+
+- Test page available at /draft-test
+- Includes league and squad data testing
+- Visual feedback for API responses
