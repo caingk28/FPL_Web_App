@@ -52,7 +52,7 @@ function detectFormation(players: SquadPlayer[]): keyof typeof FORMATIONS {
 
 function PlayerPosition({ player, position: [x, y] }: { player: SquadPlayer, position: [number, number] }) {
   const teamCodeMap: Record<string, string> = {
-    'ARS': 'arsenal',
+    'ARS': 'ars',
     'AVL': 'astonvilla',
     'BOU': 'bou',
     'BRE': 'brentford',
@@ -135,7 +135,7 @@ export function DraftSquadFormation({ players }: FormationProps) {
   }, {} as Record<string, SquadPlayer[]>);
 
   const teamCodeMap: Record<string, string> = {
-    'ARS': 'arsenal',
+    'ARS': 'ars',
     'AVL': 'astonvilla',
     'BOU': 'bou',
     'BRE': 'brentford',
